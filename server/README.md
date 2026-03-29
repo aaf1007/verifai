@@ -37,7 +37,7 @@ verifact-backend/
 │   ├── services/
 │   │   ├── text_cleaner.py  # Text cleaning utilities
 │   │   ├── claim_extractor.py  # Groq API — claim extraction
-│   │   ├── fact_checker.py     # Perplexity API — verification
+│   │   ├── fact_checker.py     # Gemini API — verification
 │   │   └── transcriber.py      # Groq Whisper — transcription
 │   ├── models/
 │   │   └── schemas.py       # Pydantic request/response models
@@ -60,7 +60,7 @@ verifact-backend/
 ## Implementation Checklist
 
 - [ ] Get Groq API key from https://console.groq.com
-- [ ] Get Perplexity API key from https://docs.perplexity.ai
+- [ ] Get Gemini API key from https://aistudio.google.com
 - [ ] Uncomment the API call in `services/claim_extractor.py`
 - [ ] Uncomment the API call in `services/fact_checker.py`
 - [ ] Uncomment the API call in `services/transcriber.py`
