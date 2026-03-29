@@ -27,7 +27,6 @@ from datetime import datetime
 
 class Verdict(str, Enum):
     """The possible fact-check outcomes for a claim.
-
     Used in both ClaimAnalysis (per-claim verdict) and FactCheckResponse
     (overall verdict aggregated across all claims).
 

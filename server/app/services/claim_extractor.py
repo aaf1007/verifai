@@ -3,6 +3,7 @@ from pathlib import Path
 
 import httpx
 
+from app.models.schemas import Checkability, ExtractedClaim
 
 # Load system prompt from file
 _PROMPT_PATH = Path(__file__).parent.parent / "prompts" / "claim_extraction.md"
@@ -12,7 +13,7 @@ SYSTEM_PROMPT = _PROMPT_PATH.read_text()
 MODEL = "llama-3.3-70b-versatile"
 
 
-async def extract_claims(client: httpx.AsyncClient, text: str, context: str | None = None) -> list[str]:
+async def extract_claims(client: httpx.AsyncClient, text: str, context: str | None = None) -> list[ExtractedClaim]:
     """
     Send highlighted text to Groq and get back a list of factual claims.
 
@@ -28,29 +29,31 @@ async def extract_claims(client: httpx.AsyncClient, text: str, context: str | No
     if context:
         user_content = f"Highlighted text: {text}\n\nSurrounding context: {context}"
 
-    # ──────────────────────────────────────────────
-    # TODO: This is where you make the actual API call
-    #
-    # response = await client.post(
-    #     "/chat/completions",
-    #     json={
-    #         "model": MODEL,
-    #         "messages": [
-    #             {"role": "system", "content": SYSTEM_PROMPT},
-    #             {"role": "user", "content": user_content},
-    #         ],
-    #         "temperature": 0.1,  # low temp for consistent extraction
-    #         "max_tokens": 1024,
-    #     },
-    # )
-    # response.raise_for_status()
-    # data = response.json()
-    # content = data["choices"][0]["message"]["content"]
-    #
-    # # Parse the JSON array from the response
-    # claims = json.loads(content)
-    # return claims
-    # ──────────────────────────────────────────────
+    # This is where you make the actual API call
+    response = await client.post(
+            "/chat/completions",
+            json = {
+                "model": MODEL,
+                "messages": [
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "user", "content": user_content}
+                    ],
+                "temperature": 0.1, # low temp for consistent extraction
+                "max_tokens": 1024,
+                },
+            )
 
-    # PLACEHOLDER — remove this when you implement the above
-    return [text]
+    response.raise_for_status()
+    data = response.json()
+    content = data ["choices"][0]["message"]["content"]
+
+    # Parse the JSON array from the response and convert to ExtractedClaim objects
+    raw = json.loads(content)
+    return [
+        ExtractedClaim(
+            claim=item["claim"],
+            checkability=Checkability(item.get("checkability", "medium")),
+        )
+        for item in raw
+    ]
+
