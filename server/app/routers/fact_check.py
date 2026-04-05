@@ -82,6 +82,7 @@ async def fact_check(
     if not claims:
         return FactCheckResponse(
             overall_verdict=Verdict.UNVERIFIABLE,
+            title="No Verifiable Claims",
             summary="No verifiable factual claims were found in the selected text.",
             claims=[],
             checked_at=datetime.utcnow(),

@@ -79,10 +79,6 @@ export default defineBackground(() => {
     // so Chrome still considers this the same gesture context.
     await browser.action.openPopup();
 
-    if (tab?.windowId) {
-      await browser.sidePanel.open({ tabId: tab.id, windowId: tab.windowId });
-    }
-
     try {
       // API Call
       const response = await fetch("http://localhost:8000/api/fact-check", {
