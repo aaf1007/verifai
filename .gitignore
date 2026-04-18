@@ -1,0 +1,29 @@
+# Env / secrets
+.env
+**/.env
+.env.local
+**/.env.local
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.pytest_cache/
+
+# Editor / IDE
+.vscode/
+.idea/
+.claude/
+.cursor/
+.nvimlog
+pyrightconfig.json
+
+# Node / build
+node_modules/
+dist/
+.output/
+.wxt/
